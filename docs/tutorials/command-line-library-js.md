@@ -19,7 +19,9 @@ We will create a simple Kotlin/JavaScript library.
    
    fun factorial(n: Int): Long = if (n == 0) 1 else n * factorial(n - 1)
    
-   inline fun 
+   inline fun IntRange.forOdd(f: (Int) -> Unit) {
+       this.forEach { if (it % 2 == 1) f(it) }
+   }
    ```
 
 2. Compile the library using the JS compiler
@@ -28,7 +30,7 @@ We will create a simple Kotlin/JavaScript library.
    $ kotlinc-js -output sample-library.js -meta-info library.kt
    ```
 
-   The `-meta-info` option indicates that an additional js-file with binary
+   The `-meta-info` option indicates that an additional JS file with binary
    meta-information about compiled kotlin code will be created.
    
    If you want to see all available options run
@@ -44,15 +46,18 @@ We will create a simple Kotlin/JavaScript library.
    sample-library.meta.js
    ```
    
-3. You can create archive, which can be distributed as a library:
+3. You can simply distribute two JS files, `sample-library.js` and `sample-library.meta.js`.
+   The former file contains translated JavaScript code, the latter file
+   contains some meta-information about kotlin code, which is needed by compiler.
+
+   Moreover, you can append the content of `sample-library.meta.js` to the end
+   of `sample-library.js` and distribute only the resulting file.
+
+   Also you can create an archive, which can be distributed as a library:  
    
    ```
    $ jar cf sample-library.jar *.js
    ```
-   
-   Or you can simply distribute two js-files, `sample-library.js` and `sample-library.meta.js`.
-   Moreover, you can append the content of `sample-library.meta.js` to the end
-   of `sample-library.js` and distribute only the resulting file.
    
 ### Using a Kotlin/JavaScript library.
 
@@ -62,25 +67,31 @@ We will create a simple Kotlin/JavaScript library.
 import org.sample.factorial
   
 fun binom(m: Int, n: Int): Long =
-        if (m < n) factorial(n) / factorial(m) / factorial(n-m) else 1    
+        if (m < n) factorial(n) / factorial(m) / factorial(n-m) else 1
+        
+fun odd_factorial(n: Int): Long {
+    var result: Long = 1L
+    (1..n).forOdd { result = result * it }
+    return result
+}        
 ```
 
    Compile with library:
-   
-```
-   $ kotlinc-js -output binom.js -library-files sample-library.jar binom.kt
-```
 
-   If you have a pair of files, for example, `sample-library.js` and `sample-library.meta.js`,
-   you can use the following command
-   
 ```
    $ kotlinc-js -output binom.js -library-files sample-library.meta.js binom.kt
 ```
    
    Both files `sample-library.js` and `sample-library.meta.js` should be present in the latter case,
-   though in this concrete case it is not important, in general case library can contain some inline functions,
-   and translated javascript file will contain meta-information about inlining, which 
+   because translated javascript file contains meta-information about inlining, which 
    is needed by compiler.
+   
+
+   If you have an archive `sample-library.jar`, which contains `sample-library.js` and `sample-library.meta.js`,
+   you can use the following command
+   
+```
+   $ kotlinc-js -output binom.js -library-files sample-library.jar binom.kt
+```
   
    

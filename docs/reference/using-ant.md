@@ -109,9 +109,10 @@ recommended to use *withKotlin* task
 
 ## Targeting JavaScript with single source folder and metaInfo option
 
-The `metaInfo` option is useful, if you want to create a Kotlin/JavaScript library.
-If `metaInfo` was set to `true`, then during compilation additional js-file with
-binary metadata will be created.
+The `metaInfo` option is useful, if you want to distribute the result of translation as a Kotlin/JavaScript library.
+If `metaInfo` was set to `true`, then during compilation additional JS file with
+binary metadata will be created. This file should be distributed together with the
+result of translation.
 
 ``` xml
 <project name="Ant Task Test" default="build">

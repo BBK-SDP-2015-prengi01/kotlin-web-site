@@ -8,7 +8,9 @@ date:
 showAuthorInfo: false
 ---
 ### Setting up the environment
-In this tutorial we're going to use IntelliJ IDEA. You can download the free [Open Source Community Edition][intellijdownload] from [JetBrains][jetbrains].
+The tutorial works with IntelliJ IDEA Community Edition as well as IntelliJ IDEA Ultimate.
+For best experience developing Kotlin/JavaScript applications, we recommend using IntelliJ IDEA Ultimate,
+which includes the JavaScript debugger and other JavaScript support features.
 
 1. Create a New Kotlin/JavaScript Project.
 
@@ -35,7 +37,7 @@ In this tutorial we're going to use IntelliJ IDEA. You can download the free [Op
    ``` kotlin
    package org.sample
    
-   fun factorial(n: Int): Long = if (n == 0) 1 else n * factorial(n - 1)    
+   fun factorial(n: Int): Long = if (n == 0) 1 else n * factorial(n - 1)
    ``` 
 
 7. Using *File > Settings*, check compiler settings for Kotlin compiler. Disable "Copy library runtime files".
